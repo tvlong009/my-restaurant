@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons end>
+      <button ion-button icon-only color="secondary" (click)="loadMenuNew()" >
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      Welcome {{user.username}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list *ngFor="let menu of MenuList">
+    <ion-list-header>
+      Table {{menu.tableNum}}
+    </ion-list-header>
+    <ion-item *ngFor="let order of menu.orders">
+      {{order.foodNum}} - {{order.name}} : {{order.orderNum}}
+    </ion-item>
+  </ion-list>
+</ion-content>
