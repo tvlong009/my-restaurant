@@ -4,7 +4,7 @@ import {AuthProvider} from "../providers/auth/auth";
 import {LoginPage} from "../pages/login/login";
 import {UserLoginProvider} from "../providers/user-login/user-login";
 import {UserLogin} from "../model/userLogin.model";
-import {LoadingController, NavController} from "ionic-angular";
+import {LoadingController} from "ionic-angular";
 
 @Component({
   templateUrl: 'app.html'

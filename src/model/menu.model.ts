@@ -1,10 +1,12 @@
 export interface Menu {
   tableNum: number;
+  orderPerson: string;
   orders: FoodOrders[]
 }
 
-interface FoodOrders {
-  name: '';
+export interface FoodOrders {
+  name: string;
+  price: number;
   orderNum: number;
   foodNum: number;
 }

@@ -1,11 +1,32 @@
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 <ion-header>
   <ion-navbar>
     <ion-title>MenuBook</ion-title>
   </ion-navbar>
 </ion-header>
-
-
 <ion-content padding>
+  <ion-list>
+    <ion-list-header>
+      Food List
+    </ion-list-header>
+    <ion-item *ngFor="let food of foodList">
+      {{food.foodNum}} - {{food.name}} : {{food.orderNum}}
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-item-group  *ngFor="let food of foodList">
+      <ion-item>
+        <ion-label color="primary">{{food.foodNum}}</ion-label>
+        <ion-label color="secondary">{{food.name}}</ion-label>
+        <ion-input type="number" [ngModel]="food.price" disabled placeholder="OrderNumber"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input item-end type="number" [ngModel]="food.orderNum" placeholder="OrderNumber"></ion-input>
+      </ion-item>
+    </ion-item-group>
 
+  </ion-list>
 </ion-content>
