@@ -6,7 +6,7 @@ import {Menu} from "../../model/menu.model";
 
 @Injectable()
 export class MenuProvider {
-  menuList: Menu[];
+  public menuList: Menu[] = [];
   constructor(public http: Http) {
     console.log('Hello MenuProvider Provider');
   }

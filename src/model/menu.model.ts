@@ -1,12 +1,16 @@
 export interface Menu {
-  tableNum: number;
+  id: string;
+  tableNum: string;
+  timestamp: string;
   orderPerson: string;
-  orders: FoodOrders[]
+  totalPrice: number;
+  orders: FoodOrder[]
 }
 
-export interface FoodOrders {
+export interface FoodOrder {
+  id: string;
   name: string;
   price: number;
   orderNum: number;
-  foodNum: number;
+  foodId: string;
 }

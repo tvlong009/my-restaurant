@@ -1,29 +1,45 @@
-
 <ion-header>
   <ion-navbar>
     <ion-title>MenuBook</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ion-list>
-    <ion-list-header>
-      Food List
-    </ion-list-header>
-    <ion-item *ngFor="let food of foodList">
-      {{food.foodNum}} - {{food.name}} : {{food.orderNum}}
+  <form (ngSubmit)="orderSend()" #f="ngForm">
+    <ion-item>
+      <ion-label color="danger">Table Number: </ion-label>
+      <ion-select class="select-table" [(ngModel)]="Menu.tableNum" name="tableNum">
+        <ion-option *ngFor="let table of tables; trackBy: customTrackBy;"
+                    value="{{table.value}}"> {{table.value}}</ion-option>
+      </ion-select>
     </ion-item>
-  </ion-list>
-  <ion-list>
-    <ion-item-group  *ngFor="let food of foodList">
-      <ion-item>
-        <ion-label color="primary">{{food.foodNum}}</ion-label>
-        <ion-label color="secondary">{{food.name}}</ion-label>
-        <ion-input type="number" [ngModel]="food.price" disabled placeholder="OrderNumber"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input item-end type="number" [ngModel]="food.orderNum" placeholder="OrderNumber"></ion-input>
-      </ion-item>
-    </ion-item-group>
+    <br>
+    <ion-list>
+      <ion-list-header>
+        <h2>Food List</h2>
+      </ion-list-header>
+        <ion-item *ngFor="let order of Menu.orders; trackBy: customTrackBy; let i = index">
+          <ion-label color="primary">{{order.foodId}}</ion-label>
+          <ion-label color="danger">{{order.name}}</ion-label>
+          <ion-input name="price_{{i}}"
+                     type="number"
+                     [(ngModel)]="order.price"
+                     placeholder="0"
+                     class="order-price"
+                     disabled
+                     required ></ion-input>
 
-  </ion-list>
+          <ion-input class="order-num"
+                     name="orderNum_{{i}}"
+                     type="number"
+                     [(ngModel)]="order.orderNum"
+                     placeholder="Order Number"
+                     required ></ion-input>
+        </ion-item>
+    </ion-list>
+    <ion-row>
+      <ion-col class="signup-col">
+        <button ion-button class="submit-btn" full type="submit" [disabled]="!f.form.valid">Order Send</button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>

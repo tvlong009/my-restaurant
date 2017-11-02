@@ -6,29 +6,27 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { LoginPage} from '../pages/login/login'
 import { AuthProvider } from '../providers/auth/auth';
 import { UserLoginProvider } from '../providers/user-login/user-login';
 import { MenuProvider } from '../providers/menu/menu';
-import {MenuBookPage} from "../pages/menu-book/menu-book";
+import {LoginPageModule} from "../pages/login/login.module";
+import {MenuBookPageModule} from "../pages/menu-book/menu-book.module";
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    LoginPage,
-    MenuBookPage
+    HomePage
   ],
   imports: [
     BrowserModule,
     HttpModule,
+    LoginPageModule,
+    MenuBookPageModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    LoginPage,
-    MenuBookPage
+    HomePage
   ],
   providers: [
     StatusBar,
