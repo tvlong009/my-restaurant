@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Summary</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list *ngFor="let menu of menuList" style="border: 1px solid">
+    <ion-item>
+      <ion-label color="danger">
+        Table: {{menu?.tableNum}}
+      </ion-label>
+      <ion-label color="primary">
+        {{menu?.totalPrice | number}} Đ
+      </ion-label>
+      <button (click)="toggleDetails(menu)" ion-button item-end icon-start>
+        <ion-icon [name]="menu?.icon ? menu.icon : 'eye'"></ion-icon>
+        Show details
+      </button>
+    </ion-item>
+    <ion-item>
+      <ion-label>Order by: {{menu?.orderPerson}} at {{menu?.timestamp}}</ion-label>
+    </ion-item>
+    <div *ngIf="menu?.showDetails">
+        <ion-item *ngFor="let order of menu.orders">
+          <ion-avatar item-start><img src="assets/imgs/logo.png"></ion-avatar>
+          <ion-label color="primary">{{order?.foodId}}</ion-label>
+          <ion-label color="danger">{{order?.name}}</ion-label>
+          <ion-input class="order-price" type="text"
+                     disabled value="{{order?.price | number}} x {{order?.orderNum}}"></ion-input>
+        </ion-item>
+    </div>
+  </ion-list>
+</ion-content>

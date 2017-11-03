@@ -11,6 +11,9 @@ import { UserLoginProvider } from '../providers/user-login/user-login';
 import { MenuProvider } from '../providers/menu/menu';
 import {LoginPageModule} from "../pages/login/login.module";
 import {MenuBookPageModule} from "../pages/menu-book/menu-book.module";
+import {SummaryPageModule} from "../pages/summary/summary.module";
+import { SummaryProvider } from '../providers/summary/summary';
+import {CommonModule} from "@angular/common";
 @NgModule({
   declarations: [
     MyApp,
@@ -19,8 +22,10 @@ import {MenuBookPageModule} from "../pages/menu-book/menu-book.module";
   imports: [
     BrowserModule,
     HttpModule,
+    CommonModule,
     LoginPageModule,
     MenuBookPageModule,
+    SummaryPageModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -34,7 +39,8 @@ import {MenuBookPageModule} from "../pages/menu-book/menu-book.module";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
     UserLoginProvider,
-    MenuProvider
+    MenuProvider,
+    SummaryProvider
   ]
 })
 export class AppModule {}

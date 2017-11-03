@@ -1,8 +1,13 @@
 <ion-header>
   <ion-navbar>
+    <ion-buttons>
+      <button ion-button icon-only color="primary" icon-start (click)="loadSummaryPage()">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-buttons end>
-      <button ion-button icon-only color="secondary" (click)="loadMenuNew()" >
-        <ion-icon name="add"></ion-icon>
+      <button ion-button icon-only color="secondary" icon-start (click)="loadMenuNew()">
+        <ion-icon name="add-circle"></ion-icon>
       </button>
     </ion-buttons>
     <ion-title>
@@ -13,31 +18,43 @@
 
 <ion-content padding>
   <!--<ion-scroll class="custom-scroll" scrollY="true">-->
-    <ion-list  *ngFor="let menu of MenuList" style="border: 1px solid">
-      <ion-item>
-        <ion-label color="secondary">Table: {{menu.tableNum}}</ion-label>
-        <ion-label color="danger">Total: {{menu.totalPrice}} Đ </ion-label>
-        <button (click)="finishOrder(menu)" ion-button item-end icon-start>
-          <ion-icon name="checkmark"></ion-icon>  Finish
-        </button>
-      </ion-item>
-      <ion-item>
-        <ion-label>Order by: {{menu.orderPerson}} at {{menu.timestamp}}</ion-label>
-      </ion-item>
+  <ion-list *ngFor="let menu of menuList" style="border: 1px solid">
+    <ion-item>
+      <ion-label color="danger">
+        Table: {{menu.tableNum}}
+      </ion-label>
+      <ion-label color="primary">
+        {{menu.totalPrice | number}} Đ
+      </ion-label>
+      <button color="secondary" (click)="finishOrder(menu)" ion-button item-end icon-start>
+        <ion-icon name="checkmark"></ion-icon>
+        Finish
+      </button>
+      <button (click)="showMenuDetails(menu)" ion-button item-end icon-start>
+        <ion-icon [name]="menu?.icon ? menu.icon : 'eye'"></ion-icon>
+        Show details
+      </button>
+    </ion-item>
+    <ion-item>
+      <ion-label>Order by: {{menu.orderPerson}} at {{menu.timestamp}}</ion-label>
+    </ion-item>
+    <div *ngIf="menu?.showDetails">
       <ion-item-sliding *ngFor="let order of menu.orders">
         <ion-item>
           <ion-avatar item-start><img src="assets/imgs/logo.png"></ion-avatar>
           <ion-label color="primary">{{order.foodId}}</ion-label>
           <ion-label color="danger">{{order.name}}</ion-label>
-          <ion-input class="order-price" type="text" disabled value="{{order.price}} x {{order.orderNum}}"></ion-input>
+          <ion-input class="order-price" type="text"
+                     disabled value="{{order.price | number}} x {{order.orderNum}}"></ion-input>
         </ion-item>
         <ion-item-options side="right">
-          <button type="button" (click)="deleteFoodOrder(menu, order)"  ion-button color="danger">
+          <button type="button" (click)="deleteFoodOrder(menu, order)" ion-button color="danger">
             <ion-icon name="trash"></ion-icon>
             Delete
           </button>
         </ion-item-options>
       </ion-item-sliding>
-    </ion-list>
+    </div>
+  </ion-list>
 
 </ion-content>
