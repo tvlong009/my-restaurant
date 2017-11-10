@@ -20,32 +20,53 @@
   <!--<ion-scroll class="custom-scroll" scrollY="true">-->
   <ion-list *ngFor="let menu of menuList" style="border: 1px solid">
     <ion-item>
-      <ion-label color="danger">
-        Table: {{menu.tableNum}}
-      </ion-label>
       <ion-label color="primary">
-        {{menu.totalPrice | number}} Đ
+        Total:
       </ion-label>
+      <ion-input type="number" name="total" [(ngModel)]="menu.totalPrice"></ion-input>
+      <ion-select class="select-table" [(ngModel)]="menu.tableNum" name="tableNum">
+        <ion-option style="text-align: center;" *ngFor="let table of tables; trackBy: customTrackBy;"
+                    value="{{table.value}}"> Tables: {{table.value}}
+        </ion-option>
+      </ion-select>
       <button color="secondary" (click)="finishOrder(menu)" ion-button item-end icon-start>
         <ion-icon name="checkmark"></ion-icon>
-        Finish
+        Done
       </button>
       <button (click)="showMenuDetails(menu)" ion-button item-end icon-start>
         <ion-icon [name]="menu?.icon ? menu.icon : 'eye'"></ion-icon>
-        Show details
+        Details
       </button>
     </ion-item>
     <ion-item>
       <ion-label>Order by: {{menu.orderPerson}} at {{menu.timestamp}}</ion-label>
     </ion-item>
     <div *ngIf="menu?.showDetails">
-      <ion-item-sliding *ngFor="let order of menu.orders">
+      <ion-item-sliding *ngFor="let order of menu.orders; trackBy: customTrackBy; let i = index">
         <ion-item>
           <ion-avatar item-start><img src="assets/imgs/logo.png"></ion-avatar>
           <ion-label color="primary">{{order.foodId}}</ion-label>
-          <ion-label color="danger">{{order.name}}</ion-label>
-          <ion-input class="order-price" type="text"
-                     disabled value="{{order.price | number}} x {{order.orderNum}}"></ion-input>
+          <ion-select class="select-table"
+                      (ionChange)="changePrice(order, foodList)"
+                      [(ngModel)]="order.name"
+                      name="foodList_{{i}}">
+            <ion-option style="text-align: center;"
+                        *ngFor="let food of foodList; trackBy: customTrackBy;"
+                        value="{{food.name}}"> {{food.name}}
+            </ion-option>
+          </ion-select>
+          <ion-input class="order-price"
+                     type="number"
+                     name="orderPrice_{{i}}"
+                     disabled
+                     [(ngModel)]="order.price"></ion-input>
+          <ion-input class="order-num"
+                     name="orderNum_{{i}}"
+                     type="number"
+                     (change)="calculateTotal(menu)"
+                     [(ngModel)]="order.orderNum"
+                     placeholder="Order Number"
+                     required></ion-input>
         </ion-item>
         <ion-item-options side="right">
           <button type="button" (click)="deleteFoodOrder(menu, order)" ion-button color="danger">

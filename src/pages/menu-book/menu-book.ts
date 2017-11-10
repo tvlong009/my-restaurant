@@ -49,21 +49,18 @@ export class MenuBookPage {
     let orders: FoodOrder[];
     orders = [
       {
-        id: '1',
         name: 'chicken',
         price: 15000,
         orderNum: 0,
         foodId: '001'
       },
       {
-        id: '2',
         name: 'beef',
         price: 25000,
         orderNum: 0,
         foodId: '002'
       },
       {
-        id: '3',
         name: 'fish',
         price: 45000,
         orderNum: 0,
@@ -118,11 +115,7 @@ export class MenuBookPage {
       cssClass: 'customConfirm',
       buttons: [
         {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
+          text: 'Cancel'
         },
         {
           text: 'Order',

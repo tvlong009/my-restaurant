@@ -8,7 +8,7 @@
     <ion-item>
       <ion-label color="danger">Table Number: </ion-label>
       <ion-select class="select-table" [(ngModel)]="Menu.tableNum" name="tableNum">
-        <ion-option *ngFor="let table of tables; trackBy: customTrackBy;"
+        <ion-option style="text-align: center;" *ngFor="let table of tables; trackBy: customTrackBy;"
                     value="{{table.value}}"> {{table.value}}</ion-option>
       </ion-select>
     </ion-item>

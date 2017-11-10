@@ -17,6 +17,8 @@ export class HomePage {
   private user: UserLogin;
   public menuList: Menu[];
   public alert: any;
+  public tables: any[];
+  public foodList: any[];
   constructor(public navCtrl: NavController,
               private userLogin: UserLoginProvider,
               public alertCtrl: AlertController,
@@ -25,6 +27,37 @@ export class HomePage {
     this.user = this.userLogin.getUser();
     this.menuList = this.menuProvider.getListMenu();
     this.menuList = this.addDataDump(this.menuList);
+
+    this.tables = [
+      {value: '001'},
+      {value: '002'},
+      {value: '003'},
+      {value: '004'},
+      {value: '005'},
+      {value: '006'},
+      {value: '007'},
+      {value: '008'},
+      {value: '009'},
+      {value: '010'}
+    ];
+
+    this.foodList = [
+      {
+        name: 'chicken',
+        foodId: '001',
+        price: 15000
+      },
+      {
+        name: 'beef',
+        foodId: '002',
+        price: 25000
+      },
+      {
+        name: 'fish',
+        foodId: '003',
+        price: 45000
+      }
+    ];
   }
 
   loadMenuNew() {
@@ -94,5 +127,23 @@ export class HomePage {
       ]
     });
     this.alert.present();
+  }
+  calculateTotal(menu){
+    menu.totalPrice = _.sumBy(menu.orders, (data: FoodOrder) => {
+      return data.orderNum * data.price;
+    });
+  }
+
+  changePrice(order: FoodOrder, foodList: any[]){
+    let food = _.find(foodList, (food: any) => {
+      return food.name === order.name;
+    });
+    if(food){
+      order.price = food.price;
+    }
+  }
+
+  customTrackBy(index: number): any {
+    return index;
   }
 }

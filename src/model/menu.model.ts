@@ -8,7 +8,6 @@ export interface Menu {
 }
 
 export interface FoodOrder {
-  id: string;
   name: string;
   price: number;
   orderNum: number;
