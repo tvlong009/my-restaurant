@@ -41,9 +41,9 @@ export class LoginPage {
 
   presentAlert() {
     this.alert = this.alertCtrl.create({
-      title: 'Unauthenticated',
-      subTitle: 'Incorrect username or password',
-      buttons: ['Close']
+      title: 'Sai mật khẩu',
+      subTitle: 'Sai tên đăng nhập và mật khẩu ',
+      buttons: ['Đóng']
     });
     this.alert.present();
   }

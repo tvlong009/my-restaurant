@@ -12,7 +12,6 @@ export class SummaryPage {
   public menuList: Menu[] = [];
   constructor(public navCtrl: NavController, public summaryProvider: SummaryProvider) {
     this.menuList = this.summaryProvider.getListMenuSummary();
-    console.log(this.menuList);
   }
 
   addDataDump(list: Menu[]) {
