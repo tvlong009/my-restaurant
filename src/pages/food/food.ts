@@ -38,4 +38,5 @@ export class FoodPage {
     createFood() {
         this.foodProvider.setFood(this.foodModel);
     }
+    
 }
