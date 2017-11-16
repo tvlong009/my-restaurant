@@ -34,7 +34,7 @@ export class MenuProvider {
     if (index >= 0) {
       console.log(this.menuList[index], foodOrder);
       _.remove(this.menuList[index].orders, (order)=>{
-        return order.foodId === foodOrder.foodId;
+        return order.id === foodOrder.id;
       })
     }
     return this.menuList;
