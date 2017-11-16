@@ -6,6 +6,7 @@ import {UserLoginProvider} from "../../providers/user-login/user-login";
 import {UserLogin} from "../../model/userLogin.model";
 import {MenuProvider} from "../../providers/menu/menu";
 import * as moment from 'moment-timezone';
+import {FoodProvider} from "../../providers/food/food";
 
 @IonicPage()
 @Component({
@@ -22,7 +23,8 @@ export class MenuBookPage {
   constructor(public navCtrl: NavController,
               public menuProvider: MenuProvider,
               public alertCtrl: AlertController,
-              public userLoginProvider: UserLoginProvider) {
+              public userLoginProvider: UserLoginProvider,
+              public foodProvider: FoodProvider) {
     this.User = this.userLoginProvider.getUser();
     this.tables = [
       {value: '001'},
@@ -46,32 +48,9 @@ export class MenuBookPage {
       orders: []
     };
 
-    let orders: FoodOrder[];
-    orders = [
-      {
-        id: '1',
-        name: 'chicken',
-        price: 15000,
-        orderNum: 0,
-        foodId: '001'
-      },
-      {
-        id: '2',
-        name: 'beef',
-        price: 25000,
-        orderNum: 0,
-        foodId: '002'
-      },
-      {
-        id: '3',
-        name: 'fish',
-        price: 45000,
-        orderNum: 0,
-        foodId: '003'
-      }
-    ];
+
     this.Menu.orderPerson = this.User.username;
-    this.Menu.orders = orders;
+    this.Menu.orders = this.foodProvider.getFoodList();
   }
 
   ionViewDidLoad() {
@@ -104,28 +83,24 @@ export class MenuBookPage {
 
   presentAlert() {
     this.confirmOrder = this.alertCtrl.create({
-      title: 'Error',
-      subTitle: 'Missing Information',
-      buttons: ['Dismiss']
+      title: 'Lỗi',
+      subTitle: 'Thiếu thông tin ',
+      buttons: ['Đóng ']
     });
     this.confirmOrder.present();
   }
 
   presentConfirm(Menu: Menu) {
     this.confirmOrder = this.alertCtrl.create({
-      title: 'Confirm Orders',
-      subTitle: `Table: ` + Menu.tableNum + ` - Order By: ` + Menu.orderPerson,
+      title: 'Xác nhận lại thực đơn ',
+      subTitle: `Bàn số : ` + Menu.tableNum + ` - Người đặt : ` + Menu.orderPerson,
       cssClass: 'customConfirm',
       buttons: [
         {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
+          text: 'Huỷ bỏ '
         },
         {
-          text: 'Order',
+          text: 'Đặt ',
           handler: () => {
             if(Menu.orderPerson && Menu.tableNum){
               Menu.id = moment(new Date).format('DDMMYYYYHHmmss');

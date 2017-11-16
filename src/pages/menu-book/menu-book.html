@@ -1,24 +1,24 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>MenuBook</ion-title>
+    <ion-title>Thực đơn đặt món </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
   <form (ngSubmit)="orderSend()" #f="ngForm">
     <ion-item>
-      <ion-label color="danger">Table Number: </ion-label>
+      <ion-label color="danger">Số bàn:  </ion-label>
       <ion-select class="select-table" [(ngModel)]="Menu.tableNum" name="tableNum">
-        <ion-option *ngFor="let table of tables; trackBy: customTrackBy;"
+        <ion-option style="text-align: center;" *ngFor="let table of tables; trackBy: customTrackBy;"
                     value="{{table.value}}"> {{table.value}}</ion-option>
       </ion-select>
     </ion-item>
     <br>
     <ion-list>
       <ion-list-header>
-        <h2>Food List</h2>
+        <h2>Danh sách các món ăn </h2>
       </ion-list-header>
         <ion-item *ngFor="let order of Menu.orders; trackBy: customTrackBy; let i = index">
-          <ion-label color="primary">{{order.foodId}}</ion-label>
+          <ion-label color="primary">{{order.id}}</ion-label>
           <ion-label color="danger">{{order.name}}</ion-label>
           <ion-input name="price_{{i}}"
                      type="number"
@@ -32,13 +32,13 @@
                      name="orderNum_{{i}}"
                      type="number"
                      [(ngModel)]="order.orderNum"
-                     placeholder="Order Number"
+                     placeholder="Số lượng "
                      required ></ion-input>
         </ion-item>
     </ion-list>
     <ion-row>
       <ion-col class="signup-col">
-        <button ion-button class="submit-btn" full type="submit" [disabled]="!f.form.valid">Order Send</button>
+        <button ion-button class="submit-btn" full type="submit" [disabled]="!f.form.valid">Tạo thực đơn </button>
       </ion-col>
     </ion-row>
   </form>
