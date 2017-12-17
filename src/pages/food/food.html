@@ -39,10 +39,10 @@
         <!--<button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button>-->
       </ion-col>
    </ion-row>
-
   </form>
-<br/>
+<!--<br/>-->
   <h4>Danh sách các món ăn </h4>
+  <ion-list>
   <ion-item-sliding *ngFor="let food of foodOrders; trackBy: customTrackBy; let i = index">
     <ion-item>
       <ion-label color="primary">{{food.id}}</ion-label>
@@ -50,9 +50,10 @@
       <ion-label color="danger">{{food.price | number}} Đ </ion-label>
     </ion-item>
     <ion-item-options side="right">
-      <button type="button" (click)="deleteFoodOrder(menu, order)" ion-button color="danger">
+      <button type="button" (click)="deleteFood(food)" ion-button color="danger">
         <ion-icon name="trash"></ion-icon>
       </button>
     </ion-item-options>
   </ion-item-sliding>
+    </ion-list>
 </ion-content>

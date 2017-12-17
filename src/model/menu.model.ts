@@ -1,16 +1,17 @@
 export interface Menu {
     id: string;
-    tableNum: string;
+    table: string;
     timestamp: string;
-    orderPerson: string;
-    totalPrice: number;
-    orders: FoodOrder[]
+    userId: string;
+    total: number;
+    show: boolean;
+    icon: string;
+    foodList: any[]
 }
 
 export interface FoodOrder {
     name: string;
     price: number;
-    orderNum: number;
     id: string;
 }
 

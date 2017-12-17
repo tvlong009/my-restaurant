@@ -16,6 +16,9 @@ import {SummaryProvider} from '../providers/summary/summary';
 import {CommonModule} from "@angular/common";
 import {FoodPageModule} from "../pages/food/food.module";
 import { FoodProvider } from '../providers/food/food';
+import {UserProvider} from "../providers/api/user";
+import {TableProvider} from "../providers/api/table";
+import {PipesModule} from "../pipes/pipes.module";
 
 @NgModule({
     declarations: [
@@ -24,6 +27,7 @@ import { FoodProvider } from '../providers/food/food';
     ],
     imports: [
         BrowserModule,
+        PipesModule,
         HttpModule,
         CommonModule,
         LoginPageModule,
@@ -43,6 +47,8 @@ import { FoodProvider } from '../providers/food/food';
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         AuthProvider,
         UserLoginProvider,
+        UserProvider,
+        TableProvider,
         MenuProvider,
         SummaryProvider,
         FoodProvider

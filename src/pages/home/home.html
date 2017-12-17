@@ -16,70 +16,82 @@
       </button>
     </ion-buttons>
     <ion-title>
-      Danh sách thực đơn đã được đặt.
+      Hello {{user.role}}  Danh sách thực đơn đã được đặt.
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <!--<ion-scroll class="custom-scroll" scrollY="true">-->
-  <ion-list *ngFor="let menu of menuList" style="border: 1px solid">
-    <ion-item>
-      <ion-label color="primary">
-        Tổng tiền:
-      </ion-label>
-      <ion-input type="number" name="total" [(ngModel)]="menu.totalPrice" disabled></ion-input>
-      <ion-select class="select-table" [(ngModel)]="menu.tableNum" name="tableNum">
-        <ion-option style="text-align: center;" *ngFor="let table of tables; trackBy: customTrackBy;"
-                    value="{{table.value}}"> Bàn : {{table.value}}
-        </ion-option>
-      </ion-select>
-      <button color="secondary" (click)="finishOrder(menu)" ion-button item-end icon-start>
-        <ion-icon name="checkmark"></ion-icon>
-        Đã trả tiền
-      </button>
-      <button (click)="showMenuDetails(menu)" ion-button item-end icon-start>
-        <ion-icon [name]="menu?.icon ? menu.icon : 'eye'"></ion-icon>
-        Xem chi tiết
-      </button>
-    </ion-item>
-    <ion-item>
-      <ion-label>Đặt bởi : {{menu.orderPerson}} vào lúc {{menu.timestamp}}</ion-label>
-    </ion-item>
-    <div *ngIf="menu?.showDetails">
-      <ion-item-sliding *ngFor="let order of menu.orders; trackBy: customTrackBy; let i = index">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown"
+                           pullingText="Pull to refresh"
+                           refreshingSpinner="circles"
+                           refreshingText="Refreshing..."></ion-refresher-content></ion-refresher>
+      <ion-list *ngFor="let menu of menuList" style="border: 1px solid">
         <ion-item>
-          <ion-avatar item-start><img src="assets/imgs/logo.png"></ion-avatar>
-          <ion-label color="primary">{{order.id}}</ion-label>
-          <ion-select class="select-table"
-                      (ionChange)="changePrice(order, foodList)"
-                      [(ngModel)]="order.name"
-                      name="foodList_{{i}}">
-            <ion-option style="text-align: center;"
-                        *ngFor="let food of foodList; trackBy: customTrackBy;"
-                        value="{{food.name}}"> {{food.name}}
+          <ion-label color="primary">
+            Tổng tiền:
+          </ion-label>
+          <ion-input type="number" name="total" [(ngModel)]="menu.total" disabled></ion-input>
+          <ion-select class="select-table" [(ngModel)]="menu.table" name="tableNum">
+            <ion-option style="text-align: center;" *ngFor="let table of tables; trackBy: customTrackBy;"
+                        value="{{table.id}}"> Bàn : {{table.value}}
             </ion-option>
           </ion-select>
-          <ion-input class="order-price"
-                     type="number"
-                     name="orderPrice_{{i}}"
-                     disabled
-                     [(ngModel)]="order.price"></ion-input>
-          <ion-input class="order-num"
-                     name="orderNum_{{i}}"
-                     type="number"
-                     (change)="calculateTotal(menu)"
-                     [(ngModel)]="order.orderNum"
-                     placeholder="Số "
-                     required></ion-input>
-        </ion-item>
-        <ion-item-options side="right">
-          <button type="button" (click)="deleteFoodOrder(menu, order)" ion-button color="danger">
-            <ion-icon name="trash"></ion-icon>
+          <button color="secondary" (click)="finishOrder(menu)" ion-button item-end icon-start>
+            <ion-icon name="checkmark"></ion-icon>
+            Đã trả tiền
           </button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </div>
-  </ion-list>
+          <button (click)="showMenuDetails(menu)" ion-button item-end icon-start>
+            <ion-icon [name]="menu?.icon ? menu.icon : 'eye'"></ion-icon>
+            Xem chi tiết
+          </button>
+        </ion-item>
+        <ion-item>
+          <ion-label>Đặt bởi : {{menu.userId}} vào lúc {{menu.timestamp | date:'DD-MM-YYYY HH:mm:ss'}}</ion-label>
+        </ion-item>
+        <div *ngIf="menu?.showDetails">
+          <ion-item-sliding *ngFor="let order of menu.foodList; trackBy: customTrackBy; let i = index">
+            <ion-item>
+              <ion-avatar item-start><img src="assets/imgs/logo.png"></ion-avatar>
+              <ion-label color="primary">{{order.id}}</ion-label>
+              <ion-select class="select-table"
+                          (ionChange)="changeFood(order, foodList, menu)"
+                          [(ngModel)]="order.id"
+                          name="foodList_{{i}}">
+                <ion-option style="text-align: center;"
+                            *ngFor="let food of foodList; trackBy: customTrackBy;"
+                            value="{{food.id}}"> {{food.name}}
+                </ion-option>
+              </ion-select>
+              <ion-input class="order-price"
+                         type="text"
+                         name="orderPrice_{{i}}"
+                         disabled
+                         [(ngModel)]="order.price"></ion-input>
+
+            </ion-item>
+            <ion-item>
+              <ion-label> Số lượng:  </ion-label>
+              <ion-input class="order-num"
+                         name="orderNum_{{i}}"
+                         type="number"
+                         (change)="calculateTotal(menu)"
+                         [(ngModel)]="order.num"
+                         placeholder="Số "
+                         required></ion-input>
+            </ion-item>
+            <ion-item-options side="right">
+              <button type="button" (click)="deleteFoodOrder(menu, order)" ion-button color="danger">
+                <ion-icon name="trash">Xoá</ion-icon>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </div>
+      </ion-list>
+    <!--</ion-refresher-content>-->
+  <!--</ion-refresher>-->
+
+
 
 </ion-content>

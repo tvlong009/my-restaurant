@@ -6,33 +6,33 @@ import {UserLoginProvider} from "../providers/user-login/user-login";
 import {UserLogin} from "../model/userLogin.model";
 import {LoadingController} from "ionic-angular";
 
+
 @Component({
-  templateUrl: 'app.html'
+    templateUrl: 'app.html'
 })
 export class MyApp {
-  public rootPage: any = LoginPage;
-  private user: UserLogin;
-  public loader: any;
-  constructor(private auth: AuthProvider,
-              private userLogin: UserLoginProvider,
-              public loadingCtrl: LoadingController) {
-    this.user  = this.userLogin.getUser();
-    this.presentLoadingDefault();
-    this.auth.login(this.user.username, this.user.password).then(isLoggedIn => {
-      if (isLoggedIn) {
-        this.rootPage = HomePage;
-      } else {
-        this.rootPage = LoginPage;
-      }
-      this.loader.dismiss();
-    })
-  }
+    public rootPage: any = LoginPage;
+    private user: UserLogin;
+    public loader: any;
 
-  presentLoadingDefault() {
-    this.loader = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
-    this.loader.present();
-  }
+    constructor(private auth: AuthProvider,
+                private userLogin: UserLoginProvider,
+                public loadingCtrl: LoadingController) {
+        this.user = this.userLogin.getUser();
+        this.presentLoadingDefault();
+        if (!this.userLogin.getUser()) {
+            this.rootPage = HomePage;
+        } else {
+            this.rootPage = LoginPage;
+        }
+        this.loader.dismiss();
+    }
+
+    presentLoadingDefault() {
+        this.loader = this.loadingCtrl.create({
+            content: 'Please wait...'
+        });
+        this.loader.present();
+    }
 }
 

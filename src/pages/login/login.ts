@@ -7,45 +7,45 @@ import {HomePage} from "../home/home";
 
 @IonicPage()
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html',
+    selector: 'page-login',
+    templateUrl: 'login.html',
 })
 export class LoginPage {
-  private user: UserLogin;
-  private alert: any;
+    private user: UserLogin;
+    private alert: any;
 
-  constructor(public navCtrl: NavController,
-              private auth: AuthProvider,
-              private userLogin: UserLoginProvider,
-              public alertCtrl: AlertController) {
-    this.user = {
-      username: '',
-      password: ''
+    constructor(public navCtrl: NavController,
+                private auth: AuthProvider,
+                private userLogin: UserLoginProvider,
+                public alertCtrl: AlertController) {
+        this.user = {
+            id: '',
+            role: '',
+            username: '',
+            password: ''
+        }
     }
-  }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
-  }
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad LoginPage');
+    }
 
-  login() {
-    this.auth.login(this.user.username, this.user.password).then((isValid) => {
-      if (isValid) {
-        this.userLogin.setUser(this.user.username, this.user.password);
-        this.navCtrl.setRoot(HomePage);
-      } else {
-        this.presentAlert();
-      }
-    })
-  }
+    login() {
+        if (this.auth.login(this.user.username, this.user.password)) {
+            this.userLogin.setUser(this.auth.login(this.user.username, this.user.password));
+            this.navCtrl.setRoot(HomePage);
+        } else {
+            this.presentAlert();
+        }
+    }
 
-  presentAlert() {
-    this.alert = this.alertCtrl.create({
-      title: 'Sai mật khẩu',
-      subTitle: 'Sai tên đăng nhập và mật khẩu ',
-      buttons: ['Đóng']
-    });
-    this.alert.present();
-  }
+    presentAlert() {
+        this.alert = this.alertCtrl.create({
+            title: 'Sai mật khẩu',
+            subTitle: 'Sai tên đăng nhập và mật khẩu ',
+            buttons: ['Đóng']
+        });
+        this.alert.present();
+    }
 
 }

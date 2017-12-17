@@ -3,40 +3,42 @@ import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {FoodOrder, Menu} from "../../model/menu.model";
 import * as _ from 'lodash';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+import {environment} from "../../environment/environment";
+import {NavController} from "ionic-angular";
+import {HomePage} from "../../pages/home/home";
 
 @Injectable()
 export class MenuProvider {
   public menuList: Menu[] = [];
-
+  public environment = new environment();
+  public url: string;
   constructor(public http: Http) {
-    console.log('Hello MenuProvider Provider');
+    this.url = this.environment.URL_API;
   }
 
-  setListMenu(menu: Menu) {
-    this.menuList.push(menu);
+  setListMenuApi(menu: Menu) {
+    return this.http.post(this.url + 'menu', menu).map(res => res.json()).toPromise();
   }
 
-  getListMenu() {
-    return this.menuList;
+  getListMenuApi() {
+    return this.http.get(this.url + 'menu').map(res => res.json()).toPromise();
   }
 
-  removeListMenu(menu: Menu) {
-    _.remove(this.menuList, (data: any) => {
-      return menu.id === data.id
-    });
-    return this.menuList;
+  getMenuById(id){
+    return this.http.get(this.url + 'menu/' + id).map(res=>res.json()).toPromise();
   }
 
-  removeFoodOrder(menu: Menu, foodOrder: FoodOrder) {
-    let index = _.findIndex(this.menuList, (data) => {
-      return menu.id === data.id
-    });
-    if (index >= 0) {
-      console.log(this.menuList[index], foodOrder);
-      _.remove(this.menuList[index].orders, (order)=>{
-        return order.id === foodOrder.id;
-      })
-    }
-    return this.menuList;
+  updateMenuById(menu){
+    return this.http.put(this.url + 'menu/' + menu.id, menu).map(res => res.json()).toPromise();
+  }
+
+  removeMenu(menu: Menu) {
+    return this.http.delete(this.url + 'menu/'+ menu.id).map(res =>res.json()).toPromise();
+  }
+
+  removeFoodOrder(menu: Menu) {
+    return this.getMenuById(menu.id);
   }
 }

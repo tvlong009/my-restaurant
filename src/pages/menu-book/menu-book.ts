@@ -7,125 +7,145 @@ import {UserLogin} from "../../model/userLogin.model";
 import {MenuProvider} from "../../providers/menu/menu";
 import * as moment from 'moment-timezone';
 import {FoodProvider} from "../../providers/food/food";
+import {TableProvider} from "../../providers/api/table";
+import {HomePage} from "../home/home";
 
 @IonicPage()
 @Component({
-  selector: 'page-menu-book',
-  templateUrl: 'menu-book.html',
+    selector: 'page-menu-book',
+    templateUrl: 'menu-book.html',
 })
 export class MenuBookPage {
 
-  public Menu: Menu;
-  public confirmOrder: any;
-  public User: UserLogin;
-  public tables: any[];
+    public Menu: Menu;
+    public foodList: any[] = [];
+    public foodOrder: any = {};
+    public confirmOrder: any;
+    public user: UserLogin;
+    public tables: any[];
 
-  constructor(public navCtrl: NavController,
-              public menuProvider: MenuProvider,
-              public alertCtrl: AlertController,
-              public userLoginProvider: UserLoginProvider,
-              public foodProvider: FoodProvider) {
-    this.User = this.userLoginProvider.getUser();
-    this.tables = [
-      {value: '001'},
-      {value: '002'},
-      {value: '003'},
-      {value: '004'},
-      {value: '005'},
-      {value: '006'},
-      {value: '007'},
-      {value: '008'},
-      {value: '009'},
-      {value: '010'}
+    constructor(public navCtrl: NavController,
+                public menuProvider: MenuProvider,
+                public alertCtrl: AlertController,
+                public userLoginProvider: UserLoginProvider,
+                public tableProvider: TableProvider,
+                public foodProvider: FoodProvider) {
+        this.user = this.userLoginProvider.getUser();
+        this.tableProvider.getTables().then(res =>{
+            this.tables = res;
+        });
+        this.Menu = {
+            id: '',
+            table: '',
+            userId: '',
+            timestamp: '',
+            total: 0,
+            show: true,
+            icon: 'eye-off',
+            foodList: []
+        };
 
-    ];
-    this.Menu = {
-      id: '',
-      tableNum: '',
-      orderPerson: '',
-      timestamp: '',
-      totalPrice: 0,
-      orders: []
-    };
+        // this.foodProvider.getFoodList().then((res) =>{
+        //     this.Menu.foodList = res;
+        //     _.each(this.Menu.foodList, (food)=>{
+        //         food.num = 0;
+        //     })
+        // });
 
-
-    this.Menu.orderPerson = this.User.username;
-    this.Menu.orders = this.foodProvider.getFoodList();
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MenuBookPage');
-  }
-
-  orderSend() {
-    let MenuTemp: Menu = JSON.parse(JSON.stringify(this.Menu));
-    // Get orders with number
-    MenuTemp.orders = _.remove(MenuTemp.orders, (data: FoodOrder) => {
-      return data.orderNum > 0;
-    });
-    // Set time
-    MenuTemp.timestamp = moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
-
-    // Total calculate
-    if (MenuTemp.orders.length > 0) {
-      MenuTemp.totalPrice = _.sumBy(MenuTemp.orders, (data: FoodOrder) => {
-        return data.orderNum * data.price;
-      });
-      this.presentConfirm(MenuTemp);
-    } else {
-      this.presentAlert();
+        this.Menu.userId = this.user.id;
     }
-  }
 
-  customTrackBy(index: number): any {
-    return index;
-  }
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad MenuBookPage');
+    }
 
-  presentAlert() {
-    this.confirmOrder = this.alertCtrl.create({
-      title: 'Lỗi',
-      subTitle: 'Thiếu thông tin ',
-      buttons: ['Đóng ']
-    });
-    this.confirmOrder.present();
-  }
+    orderSend() {
+        let MenuTemp: Menu = JSON.parse(JSON.stringify(this.Menu));
+        // Get orders with number
+        MenuTemp.foodList = _.remove(MenuTemp.foodList, (data: any) => {
+          return data.num > 0;
+        });
+        // Set time
+        MenuTemp.timestamp = moment().format();
 
-  presentConfirm(Menu: Menu) {
-    this.confirmOrder = this.alertCtrl.create({
-      title: 'Xác nhận lại thực đơn ',
-      subTitle: `Bàn số : ` + Menu.tableNum + ` - Người đặt : ` + Menu.orderPerson,
-      cssClass: 'customConfirm',
-      buttons: [
-        {
-          text: 'Huỷ bỏ '
-        },
-        {
-          text: 'Đặt ',
-          handler: () => {
-            if(Menu.orderPerson && Menu.tableNum){
-              Menu.id = moment(new Date).format('DDMMYYYYHHmmss');
-              this.menuProvider.setListMenu(Menu);
-              this.navCtrl.pop();
-            }else {
-              this.presentAlert();
-            }
-          }
+        // Total calculate
+        if (MenuTemp.foodList.length > 0) {
+          MenuTemp.total = _.sumBy(MenuTemp.foodList, (data: any) => {
+            return data.num * data.price;
+          });
+          this.presentConfirm(MenuTemp);
+        } else {
+          this.presentAlert();
         }
-      ]
-    });
+    }
 
-    _.each(Menu.orders, (order: FoodOrder) => {
-      this.confirmOrder.addInput({
-        type: 'checkbox',
-        label: order.name + ' : ' + order.orderNum,
-        checked: true,
-        cursor: false,
-        disabled: true
-      });
-    });
+    customTrackBy(index: number): any {
+        return index;
+    }
 
-    this.confirmOrder.present();
-  }
+    presentAlert() {
+        this.confirmOrder = this.alertCtrl.create({
+            title: 'Lỗi',
+            subTitle: 'Thiếu thông tin ',
+            buttons: ['Đóng ']
+        });
+        this.confirmOrder.present();
+    }
 
+    presentConfirm(Menu: Menu) {
+        this.confirmOrder = this.alertCtrl.create({
+            title: 'Xác nhận lại thực đơn ',
+            subTitle: `Bàn số : ` + Menu.table + ` - Người đặt : ` + Menu.userId,
+            cssClass: 'customConfirm',
+            buttons: [
+                {
+                    text: 'Huỷ bỏ '
+                },
+                {
+                    text: 'Đặt ',
+                    handler: () => {
+                        if (Menu.userId && Menu.table) {
+                            Menu.id = moment(new Date).format('DDMMYYYYHHmmss');
 
+                            this.menuProvider.setListMenuApi(Menu).then(()=>{
+                                this.navCtrl.setRoot(HomePage);
+                            });
+                        } else {
+                            this.presentAlert();
+                        }
+                    }
+                }
+            ]
+        });
+
+        _.each(Menu.foodList, (order: any) => {
+          this.confirmOrder.addInput({
+            type: 'checkbox',
+            label: order.name + ' : ' + order.num,
+            checked: true,
+            cursor: false,
+            disabled: true
+          });
+        });
+
+        this.confirmOrder.present();
+    }
+    searchFoodById(foodId){
+       this.foodProvider.getFoodById(foodId).then(res =>{
+           if(res){
+               res.num = 0;
+               this.foodOrder = res;
+           }
+       }).catch(err =>{
+       });
+    }
+    createFood(){
+        this.Menu.foodList.push(this.foodOrder);
+        this.foodOrder = {};
+    }
+    deleteFood(foodOrder){
+        _.remove(this.Menu.foodList, (food)=>{
+            return food.id = foodOrder.id;
+        })
+    }
 }
