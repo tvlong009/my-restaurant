@@ -42,15 +42,11 @@ export class MenuBookPage {
             total: 0,
             show: true,
             icon: 'eye-off',
+            month: moment().format('MM'),
+            day: moment().format('DD'),
+            year: moment().format('YYYY'),
             foodList: []
         };
-
-        // this.foodProvider.getFoodList().then((res) =>{
-        //     this.Menu.foodList = res;
-        //     _.each(this.Menu.foodList, (food)=>{
-        //         food.num = 0;
-        //     })
-        // });
 
         this.Menu.userId = this.user.id;
     }

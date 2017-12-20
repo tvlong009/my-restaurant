@@ -102,7 +102,58 @@ export class HomePage implements OnInit {
         }
         this.menuProvider.updateMenuById(menu).then(res =>{});
     }
+    editFoodOrder(menu:Menu, foodOrder: any){
+            this.alert = this.alertCtrl.create({
+                title: 'Chính sửa món ăn',
+                inputs: [
+                    {
+                        name: 'id',
+                        type: 'text',
+                        disabled: true,
+                        value: foodOrder.id
+                    },
+                    {
+                        name: 'name',
+                        placeholder: 'name',
+                        type: 'text',
+                        disabled: true,
+                        value: foodOrder.name
+                    },
+                    {
+                        name: 'price',
+                        placeholder: 'price',
+                        type: 'text',
+                        disabled: true,
+                        value: foodOrder.price + ' Đ'
+                    },
+                    {
+                        name: 'num',
+                        placeholder: 'price',
+                        type: 'text',
+                        disabled: true,
+                        value: foodOrder.num
+                    }
+                ],
+                buttons: [
+                    {
+                        text: 'Bỏ',
+                        role: 'cancel',
+                        handler: data => {
+                            console.log('Cancel clicked');
+                        }
+                    },
+                    {
+                        text: 'Sửa',
+                        handler: data => {
+                          foodOrder.num = data.num;
+                          this.calculateTotal(menu);
+                        }
+                    }
+                ]
+            });
+            this.alert.present();
 
+    }
 
     deleteFoodOrder(menu: Menu, foodOrder: FoodOrder) {
         this.alert = this.alertCtrl.create({

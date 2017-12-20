@@ -25,30 +25,29 @@ export class SummaryPage {
   }
 
   searchByData(){
+      this.menuArraySearch = [];
+      let day = moment(this.dataSearch).format('DD');
+      let month = moment(this.dataSearch).format('MM');
+      let year = moment(this.dataSearch).format('YYYY');
+
     switch (this.chooseType){
         case 'day':
-          this.menuArraySearch = _.filter(this.menuList, (menu: any) =>{
-            return moment(this.dataSearch).diff(moment(menu.timestamp).format(), 'days') === 0
-              && moment(this.dataSearch).diff(moment(menu.timestamp).format(), 'month') === 0
-                && moment(this.dataSearch).diff(moment(menu.timestamp).format(), 'years') === 0;
-          });
-            this.totalBySearch = _.sumBy(this.menuArraySearch, (menu) => { return menu.total; });
-            console.log(this.menuArraySearch);
+            this.summaryProvider.searchByDate(day, month , year).then(res=>{
+                this.menuArraySearch = res;
+                this.totalBySearch = _.sumBy(this.menuArraySearch, (menu) => { return menu.total; });
+            });
           break;
         case 'month':
-            this.menuArraySearch = _.filter(this.menuList, (menu: any) =>{
-                return moment(this.dataSearch).diff(moment(menu.timestamp).format(), 'month') === 0
-                    && moment(this.dataSearch).diff(moment(menu.timestamp).format(), 'years') === 0;
+            this.summaryProvider.searchByMonthYear(month , year).then(res=>{
+                this.menuArraySearch = res;
+                this.totalBySearch = _.sumBy(this.menuArraySearch, (menu) => { return menu.total; });
             });
-            this.totalBySearch = _.sumBy(this.menuArraySearch, (menu) => { return menu.total; });
-            console.log(this.menuArraySearch);
           break;
         case 'year':
-            this.menuArraySearch = _.filter(this.menuList, (menu: any) =>{
-                return moment(this.dataSearch).diff(moment(menu.timestamp).format(), 'years') === 0;
+            this.summaryProvider.searchByYear(year).then(res=>{
+                this.menuArraySearch = res;
+                this.totalBySearch = _.sumBy(this.menuArraySearch, (menu) => { return menu.total; });
             });
-            this.totalBySearch = _.sumBy(this.menuArraySearch, (menu) => { return menu.total; });
-            console.log(this.menuArraySearch);
             break;
     }
   }

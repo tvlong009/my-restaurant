@@ -19,7 +19,6 @@ import { FoodProvider } from '../providers/food/food';
 import {UserProvider} from "../providers/api/user";
 import {TableProvider} from "../providers/api/table";
 import {PipesModule} from "../pipes/pipes.module";
-
 @NgModule({
     declarations: [
         MyApp,

@@ -22,4 +22,13 @@ export class SummaryProvider {
         this.menuSummary.push(menu);
     });
   }
+  searchByDate(day, month, year){
+    return this.http.get(this.url + 'summary?day=' + day + '&month=' + month + '&year=' + year).map(res => res.json()).toPromise();
+  }
+  searchByMonthYear(month, year){
+      return this.http.get(this.url + 'summary?month=' + month + '&year=' + year).map(res => res.json()).toPromise();
+  }
+  searchByYear(year){
+      return this.http.get(this.url + 'summary?year=' + year).map(res => res.json()).toPromise();
+  }
 }

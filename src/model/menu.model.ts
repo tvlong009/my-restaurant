@@ -2,6 +2,9 @@ export interface Menu {
     id: string;
     table: string;
     timestamp: string;
+    month: string,
+    day: string,
+    year: string,
     userId: string;
     total: number;
     show: boolean;
