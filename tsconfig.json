@@ -13,6 +13,7 @@
     "sourceMap": true,
     "target": "es5"
   },
+  "scripts": [ "../node_modules/jspdf/dist/jspdf.min.js" ],
   "include": [
     "src/**/*.ts"
   ],

@@ -12,7 +12,7 @@ import {FoodProvider} from "../../providers/food/food";
 import {FoodPage} from "../food/food";
 import {TableProvider} from "../../providers/api/table";
 import * as moment from 'moment-timezone';
-
+import * as jsPDF from 'jspdf'
 @Component({
     selector: 'page-home',
     templateUrl: 'home.html'
@@ -219,76 +219,32 @@ export class HomePage implements OnInit {
     }
 
     billPrint(menu, event){
-        console.log(event);
-        this.canvas = document.createElement('canvas');
-        this.canvas.id = 'canvas';
-        this.canvas.width = 400;
-        this.canvas.height = 400;
-        //this.canvas = document.getElementById('canvas');
-        this.context = this.canvas.getContext('2d');
-        this.doCanvas(menu);
-        this.downloadCanvas(event.srcElement,moment().format('HH:mm:ss DD-MM-YYYY')+'.');
-    }
-
-    doCanvas(menu) {
-        let height = 100;
-        this.context.beginPath();
-        // this.context.rect(1, 1, 398, 100);
-        this.context.fill();
-       // draw some text, leaving space for the avatar image
-        this.context.fillStyle = "black";
-        this.context.font = "28px Arial";
-        this.context.fillText("GOLD VELVET - Jjim Jil Bang", 80, 40, 250);
-        this.context.font = "18px Arial";
-        this.context.fillText("Hoá đơn tính tiền", 140, 70, 190);
-        this.context.font = "12px Arial";
-        this.context.fillText("Bàn Số: " + menu.table, 10, 90, 190);
-        this.context.font = "12px Arial";
-        this.context.fillText("Hoá Đơn Sô: " + moment().format('HHmmssDDMMYYY'), 100, 90, 190);
-        this.context.font = "12px Arial";
-        this.context.fillText("NVPV: " + menu.userId, 290, 90, 350);
-        this.context.rect(1, 1, 398, 100);
-        this.context.font = "24px Arial";
-        let rowHeight = 120;
+        let height = 10;
+        let doc = new jsPDF();
         let total = 0;
-        this.context.font = "12px Arial";
+        doc.text('Gold Velvet - Jim Jil Bang', 1, height);
+        height += 10;
+        doc.text('Hoa Don Tinh Tien', 10, height);
+        height += 10;
+        doc.text("---------------------------------------------", 1, height);
+        doc.setFontSize(8);
         _.each(menu.foodList, (food: any, )=>{
-            this.context.fillStyle = "red";
-            this.context.fillText(food.id + ' - ' + food.name + ": ", 10, rowHeight, 190);
-            this.context.fillStyle = "red";
-            this.context.fillText(food.price +" x " + food.num, 200, rowHeight, 190);
-            this.context.fillStyle = "green";
-            this.context.fillText("= " + food.price * parseInt(food.num) + ' Đ' , 310, rowHeight, 190);
+            height +=10;
+            doc.text(food.id + '.' + food.name, 1, height);
+            doc.text(food.price +"x" + food.num, 35, height);
+            doc.text(": " + food.price * parseInt(food.num) + 'VND' ,52, height);
             total += food.price * parseInt(food.num);
-            height += 20;
-            rowHeight += 20;
         });
         height += 10;
-        this.context.rect(1, 1, 398, height);
-        height += 20;
-        this.context.fillStyle = "black";
-        this.context.font = "15px Arial";
-        this.context.fillStyle = "red";
-        this.context.fillText("Thành Tiền: ", 200, height , 190);
-        this.context.fillStyle = "green";
-        this.context.fillText(total + ' Đ' , 310, height, 190);
+        doc.text("-------------------------------------------------------------------------", 1, height);
         height += 10;
-        this.context.fillStyle = "white";
-        this.context.rect(1, 1, 398, height);
-        this.context.fillStyle = "black";
-        this.context.font = "15px Arial";
-        height += 30;
-        this.context.fillText("^_^ Xin Cám Ơn Và Hẹn Gặp Lại ^_^", 70,  height, 300);
-        height += 20;
-        this.context.fillStyle = "white";
-        this.context.rect(1, 1, 398, height);
-        this.context.stroke();
-        // draw avatar image on the left
-
-    }
-
-    downloadCanvas(link, filename) {
-        link.parentElement.setAttribute('href',this.canvas.toDataURL());
-        link.parentElement.download = filename;
+        doc.text("Thanh Tien",35, height );
+        doc.text(": " + total + 'VND', 52, height );
+        height += 10;
+        doc.setFontSize(11);
+        doc.text("-------------------------------------------------------------------------", 1, height);
+        height += 10;
+        doc.text("^~^ Xin Chao Va Hen Gap Lai ^~^", 5, height);
+        doc.save(menu.id + '.pdf');
     }
 }
