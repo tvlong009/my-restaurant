@@ -1,13 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
-import {FoodOrder, Menu} from "../../model/menu.model";
-import * as _ from 'lodash';
+import {Menu} from "../../model/menu.model";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import {environment} from "../../environment/environment";
-import {NavController} from "ionic-angular";
-import {HomePage} from "../../pages/home/home";
 
 @Injectable()
 export class MenuProvider {

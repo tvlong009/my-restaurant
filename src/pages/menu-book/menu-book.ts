@@ -140,8 +140,9 @@ export class MenuBookPage {
         this.foodOrder = {};
     }
     deleteFood(foodOrder){
-        _.remove(this.Menu.foodList, (food)=>{
+        _.remove(this.Menu.foodList[0], (food)=>{
             return food.id = foodOrder.id;
         })
+
     }
 }

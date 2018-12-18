@@ -13,6 +13,7 @@ import {FoodPage} from "../food/food";
 import {TableProvider} from "../../providers/api/table";
 import * as moment from 'moment-timezone';
 import * as jsPDF from 'jspdf'
+import {GoldvelvetPage} from "../goldvelvet/goldvelvet";
 @Component({
     selector: 'page-home',
     templateUrl: 'home.html'
@@ -55,6 +56,10 @@ export class HomePage implements OnInit {
         this.navCtrl.push(MenuBookPage);
     }
 
+    loadGoldVelvetPage() {
+        this.navCtrl.push(GoldvelvetPage);
+    }
+
     loadSummaryPage() {
         this.navCtrl.push(SummaryPage);
     }
@@ -83,6 +88,7 @@ export class HomePage implements OnInit {
                 {
                     text: 'Xong ',
                     handler: () => {
+                        this.menuProvider.updateMenuById(menu);
                         this.summaryProvider.addMenuSummary(menu);
                         this.menuProvider.removeMenu(menu).then(()=>{
                             this.navCtrl.setRoot(HomePage);
@@ -194,12 +200,18 @@ export class HomePage implements OnInit {
     }
 
     changeFood(order: FoodOrder, foodList: any[], menu: any) {
-        console.log(order, foodList, menu);
-        let food = _.find(foodList, (food: any) => {
+        console.log('1',order, foodList, menu);
+        let food = _.filter(foodList, (food: any) => {
             return food.id === order.id;
         });
+
         if (food) {
-            order.price = parseInt(food.price);
+            _.forEach(food,(f:any)=>{
+                order.id = f.id;
+                order.name = f.name;
+                order.price = parseInt(f.price);
+            });
+
             this.calculateTotal(menu);
         }
 
@@ -246,5 +258,47 @@ export class HomePage implements OnInit {
         height += 10;
         doc.text("^~^ Xin Chao Va Hen Gap Lai ^~^", 5, height);
         doc.save(menu.id + '.pdf');
+    }
+
+    addFood(menu){
+        let index = _.findIndex(this.menuList, (m)=>{
+             return m.id === menu.id;
+         });
+
+
+        let newFood:any ={
+            id: null,
+            price:null,
+            name:null,
+            num: '01'
+        };
+        if(this.foodList){
+            this.menuList[index].foodList.push(newFood);
+        }
+
+    }
+
+    deleteMenu(menu){
+        this.alert = this.alertCtrl.create({
+            title: 'Xoá menu',
+            message: 'Có chắc muốn xoá?',
+            buttons: [
+                {
+                    text: 'Suy Nghĩ Thêm ',
+                    role: 'cancel',
+                },
+                {
+                    text: 'Xoá ',
+                    handler: () => {
+                        this.menuProvider.removeMenu(menu).then(res =>{
+                            _.remove(this.menuList, (m:Menu)=>{
+                                return m.id == menu.id;
+                            })
+                        });
+                    }
+                }
+            ]
+        });
+        this.alert.present();
     }
 }

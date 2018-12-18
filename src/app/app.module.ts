@@ -19,6 +19,8 @@ import { FoodProvider } from '../providers/food/food';
 import {UserProvider} from "../providers/api/user";
 import {TableProvider} from "../providers/api/table";
 import {PipesModule} from "../pipes/pipes.module";
+import {GoldvelvetPageModule} from "../pages/goldvelvet/goldvelvet.module";
+import { GoldvelvetProvider } from '../providers/goldvelvet/goldvelvet';
 @NgModule({
     declarations: [
         MyApp,
@@ -32,6 +34,7 @@ import {PipesModule} from "../pipes/pipes.module";
         LoginPageModule,
         MenuBookPageModule,
         SummaryPageModule,
+        GoldvelvetPageModule,
         FoodPageModule,
         IonicModule.forRoot(MyApp)
     ],
@@ -50,7 +53,8 @@ import {PipesModule} from "../pipes/pipes.module";
         TableProvider,
         MenuProvider,
         SummaryProvider,
-        FoodProvider
+        FoodProvider,
+    GoldvelvetProvider
     ]
 })
 export class AppModule {

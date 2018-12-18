@@ -5,6 +5,11 @@
         <ion-icon name="stats"></ion-icon>
       </button>
     </ion-buttons>
+    <!--<ion-buttons>-->
+      <!--<button ion-button icon-only color="primary" icon-start (click)="loadGoldVelvetPage()">-->
+        <!--<ion-icon name="egg"></ion-icon>-->
+      <!--</button>-->
+    <!--</ion-buttons>-->
     <ion-buttons end>
       <button ion-button icon-only color="primary" icon-start (click)="loadFoodPage()">
         <ion-icon name="ice-cream"></ion-icon>
@@ -43,15 +48,23 @@
              color="danger"
              (click)="billPrint(menu,$event)">
             <ion-icon name="checkmark"></ion-icon>
-            In hoá đơn
+            In Bill
           </a>
           <button color="secondary" (click)="finishOrder(menu, $event)" ion-button item-end icon-start>
             <ion-icon name="checkmark"></ion-icon>
-            Đã trả tiền
+            Xong
           </button>
           <button (click)="showMenuDetails(menu)" ion-button item-end icon-start>
             <ion-icon [name]="menu?.icon ? menu.icon : 'eye'"></ion-icon>
-            Xem chi tiết
+            Xem
+          </button>
+          <button (click)="addFood(menu)" ion-button item-end icon-start>
+            <ion-icon name="ice-cream"></ion-icon>
+            Thêm món
+          </button>
+          <button (click)="deleteMenu(menu)" ion-button item-end icon-start color="danger">
+            <ion-icon name="trash"></ion-icon>
+            Xoá
           </button>
         </ion-item>
         <ion-item>
@@ -68,7 +81,7 @@
                           name="foodList_{{i}}">
                 <ion-option style="text-align: center;"
                             *ngFor="let food of foodList; trackBy: customTrackBy;"
-                            value="{{food.id}}"> {{food.name}}
+                            value="{{food.id}}" [disabled]="food.id === order.id"> {{food.name}}
                 </ion-option>
               </ion-select>
               <ion-label>{{order.price | number}} Đ</ion-label>
