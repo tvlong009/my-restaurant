@@ -1,26 +1,23 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
-
+import 'rxjs/add/operator/toPromise';
+import * as _ from 'lodash';
+import {UserProvider} from "../api/user";
 @Injectable()
 export class AuthProvider {
+    public url: string;
+    private users: any;
+    constructor(public http: Http, private userProvider: UserProvider) {
+         this.userProvider.getUsers().then(users =>{
+             this.users = users;
+        });
+    }
 
-  constructor(public http: Http) {
-    console.log('Hello AuthProvider Provider');
-  }
-
-  login(username, password) {
-    return new Promise((resolve => {
-      setTimeout(()=>{
-        if(username === 'admin' && password === 'admin'){
-          resolve(true);
-        }else if(username === 'staff' && password === 'staff') {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      }, 3000);
-    }));
-  }
+    login(username, password) {
+        return _.find(this.users, (user)=>{
+            return username === user.username && password === user.password;
+        });
+    }
 
 }

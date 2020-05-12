@@ -1,19 +1,41 @@
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Menu} from "../../model/menu.model";
-
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+import {environment} from "../../environment/environment";
 
 @Injectable()
 export class MenuProvider {
-  menuList: Menu[];
+  public menuList: Menu[] = [];
+  public environment = new environment();
+  public url: string;
   constructor(public http: Http) {
-    console.log('Hello MenuProvider Provider');
+    this.url = this.environment.URL_API;
   }
-  setListMenu(menu: Menu){
-    this.menuList.push(menu);
+
+  setListMenuApi(menu: Menu) {
+    return this.http.post(this.url + 'menu', menu).map(res => res.json()).toPromise();
   }
-  getListMenu(){
-    return this.menuList;
+
+  getListMenuApi() {
+    return this.http.get(this.url + 'menu').map(res => res.json()).toPromise();
+  }
+
+  getMenuById(id){
+    return this.http.get(this.url + 'menu/' + id).map(res=>res.json()).toPromise();
+  }
+
+  updateMenuById(menu){
+    return this.http.put(this.url + 'menu/' + menu.id, menu).map(res => res.json()).toPromise();
+  }
+
+  removeMenu(menu: Menu) {
+    return this.http.delete(this.url + 'menu/'+ menu.id).map(res =>res.json()).toPromise();
+  }
+
+  removeFoodOrder(menu: Menu) {
+    return this.getMenuById(menu.id);
   }
 }

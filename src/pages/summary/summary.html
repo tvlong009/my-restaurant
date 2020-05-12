@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Tổng hợp số liệu</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-item>
+    <ion-label>Chọn phương thức </ion-label>search
+    <ion-select class="select-table" [(ngModel)]="chooseType" name="type">
+      <ion-option style="text-align: center;" value="day">Day-Month-Year</ion-option>
+      <ion-option style="text-align: center;" value="month">Month-Year</ion-option>
+      <ion-option style="text-align: center;" value="year">Year</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item *ngIf="chooseType === 'day'">
+    <ion-label>Choose Date</ion-label>
+    <ion-datetime displayFormat="DD-MM-YYYY" [(ngModel)]="dataSearch"></ion-datetime>
+  </ion-item>
+  <ion-item *ngIf="chooseType === 'month'">
+    <ion-label>Choose Month</ion-label>
+    <ion-datetime displayFormat="MM-YYYY" [(ngModel)]="dataSearch"></ion-datetime>
+  </ion-item>
+  <ion-item *ngIf="chooseType === 'year'">
+    <ion-label>Choose Year</ion-label>
+    <ion-datetime displayFormat="YYYY" [(ngModel)]="dataSearch"></ion-datetime>
+  </ion-item>
+  <button (click)="searchByData()" ion-button item-end icon-start>
+    <ion-icon name="search"></ion-icon>
+    Search
+  </button>
+
+  <ion-item>
+    <ion-label>Doanh thu: {{totalBySearch | number}} Đ</ion-label>
+  </ion-item>
+  <ion-list *ngFor="let menu of menuArraySearch" style="border: 1px solid">
+    <ion-item>
+      <ion-label color="danger">
+        Bàn số : {{menu?.table}}
+      </ion-label>
+      <ion-label color="primary">
+        {{menu?.total | number}} Đ
+      </ion-label>
+      <button (click)="toggleDetails(menu)" ion-button item-end icon-start>
+        <ion-icon [name]="menu?.icon ? menu.icon : 'eye'"></ion-icon>
+        Xem chi tiết
+      </button>
+    </ion-item>
+    <ion-item>
+      <ion-label>Order by: {{menu?.userId}} at {{menu?.day}}-{{menu?.month}}-{{menu?.year}}</ion-label>
+    </ion-item>
+    <div *ngIf="menu?.showDetails">
+        <ion-item *ngFor="let food of menu.foodList">
+          <ion-avatar item-start><img src="assets/imgs/logo.png"></ion-avatar>
+          <ion-label color="primary">{{food?.id}}</ion-label>
+          <ion-label color="danger">{{food?.name}}</ion-label>
+          <ion-input class="order-price" type="text"
+                     disabled value="{{food?.price | number}} x {{food.num}}"></ion-input>
+        </ion-item>
+    </div>
+  </ion-list>
+</ion-content>
